@@ -1,4 +1,4 @@
-package com.example.nofaptakip
+package com.resulbey.nofaptakip
 
 import android.graphics.drawable.ColorDrawable
 import android.widget.CalendarView

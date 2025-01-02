@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#FFFFFF</color>
-    <color name="ic_launcher_foreground">#2196F3</color>
+    <color name="ic_launcher_background">#1A237E</color>
+    <color name="ic_launcher_foreground">#FFFFFF</color>
     <color name="md_theme_light_primary">#006C4C</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#89F8C7</color>

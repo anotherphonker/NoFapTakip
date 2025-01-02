@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace "com.example.nofaptakip"
+    namespace "com.resulbey.nofaptakip"
     compileSdk 34
     
     defaultConfig {
-        applicationId "com.example.nofaptakip"
+        applicationId "com.resulbey.nofaptakip"
         minSdk 24
         targetSdk 34
         versionCode 1

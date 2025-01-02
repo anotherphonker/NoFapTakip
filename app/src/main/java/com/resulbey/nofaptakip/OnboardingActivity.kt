@@ -1,4 +1,4 @@
-package com.example.nofaptakip
+package com.resulbey.nofaptakip
 
 import android.app.DatePickerDialog
 import android.content.Intent
