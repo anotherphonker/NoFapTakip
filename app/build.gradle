@@ -11,11 +11,11 @@ android {
         applicationId "com.resulbey.nofaptakip"
         minSdk 24
         targetSdk 34
-        versionCode 3
-        versionName "1.1.0"
+        versionCode 8
+        versionName "1.1.2"
         
-        buildConfigField "String", "VERSION_NAME", "\"1.1.0\""
-        buildConfigField "int", "VERSION_CODE", "3"
+        buildConfigField "String", "VERSION_NAME", "\"1.1.2\""
+        buildConfigField "int", "VERSION_CODE", "8"
         
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
