@@ -1,55 +1,76 @@
 # NoFap Takip
 
-NoFap yolculuğunuzu takip etmenize ve motive olmanıza yardımcı olan bir Android uygulaması.
+NoFap Takip, bağımlılıkla mücadele eden kullanıcılara yardımcı olmak için tasarlanmış bir Android uygulamasıdır.
 
-## Özellikler
+## 🌟 Özellikler
 
-- 📅 Günlük takip sistemi
-- 🏆 Başarı rozetleri
-- 💪 Motivasyon mesajları
-- 📊 Geçmiş görüntüleme
-- 🌓 Karanlık/Aydınlık tema
-- 🧠 Bilimsel temelli motivasyon ipuçları
-- 📝 Relapse nedenleri kaydı
+### 📊 Temel Özellikler
+- Temiz kalınan gün sayısı takibi
+- Başarı rozetleri sistemi
+- Geçmiş görüntüleme
+- Motivasyonel mesajlar
+- Günlük bildirimler
+- Acil durum desteği
 
-## Rozetler
+### 🎨 Kullanıcı Arayüzü
+- Modern Material Design arayüz
+- Koyu/Açık tema desteği
+- Kullanıcı dostu tasarım
+- Türkçe arayüz
 
-- 1 Gün: Yeni Başlangıç
-- 3 Gün: Kararlı
-- 7 Gün: Haftalık Başarı
-- 14 Gün: İki Haftalık Savaşçı
-- 30 Gün: Aylık Şampiyon
-- 90 Gün: Üç Aylık Efsane
-- 180 Gün: Altı Aylık Usta
-- 365 Gün: Yıllık Efsane
+### 🔄 Güncelleme Sistemi
+- Otomatik güncelleme kontrolü
+- Doğrudan APK indirme
+- Kolay güncelleme süreci
+- Güvenlik güncellemeleri
 
-## Kurulum
+### 🏆 Rozetler
+- Yeni Başlangıç (1 gün)
+- Kararlı (3 gün)
+- Haftalık Başarı (7 gün)
+- İki Haftalık Savaşçı (14 gün)
+- Aylık Şampiyon (30 gün)
+- Üç Aylık Efsane (90 gün)
+- Altı Aylık Usta (180 gün)
+- Yıllık Efsane (365 gün)
 
-1. [Releases](https://github.com/KULLANICI_ADI/NoFapTakip/releases) sayfasından en son APK'yı indirin
-2. Android cihazınızda APK'yı yükleyin
-3. Uygulamayı başlatın ve yolculuğunuza başlayın!
+### 💪 Motivasyon Sistemi
+- 100+ motivasyonel mesaj
+- Bilimsel gerçekler
+- Başarı hikayeleri
+- Günlük hatırlatmalar
 
-## Geliştirme
+## 📱 Minimum Gereksinimler
+- Android 7.0 (API 24) ve üzeri
+- İnternet bağlantısı
+- 10 MB boş depolama alanı
 
-Bu proje Android Studio ile geliştirilmiştir. Projeyi yerel ortamınızda çalıştırmak için:
+## 🔒 İzinler
+- İnternet erişimi (güncelleme kontrolü için)
+- Bildirim izni (günlük motivasyon için)
+- APK yükleme izni (güncelleme için)
 
-1. Projeyi klonlayın
-2. Android Studio'da açın
-3. Gradle sync işlemini tamamlayın
-4. Emülatör veya gerçek cihazda çalıştırın
+## 🛠️ Teknik Detaylar
+- Kotlin ile geliştirildi
+- Material Design 3 kullanıldı
+- MVVM mimarisi
+- Coroutines & Flow
+- GitHub API entegrasyonu
 
-## Katkıda Bulunma
+## 📥 Kurulum
+1. En son APK dosyasını [Releases](https://github.com/anotherphonker/NoFapTakip/releases) sayfasından indirin
+2. APK'yı cihazınıza kurun
+3. Gerekli izinleri verin
+4. Adınızı ve başlangıç tarihinizi girin
+5. Yolculuğunuza başlayın!
 
-1. Bu repository'yi fork edin
-2. Yeni bir branch oluşturun (`git checkout -b feature/yeniOzellik`)
-3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik: X'`)
-4. Branch'inizi push edin (`git push origin feature/yeniOzellik`)
-5. Pull Request oluşturun
+## 🔄 Güncelleme
+- Uygulama otomatik olarak güncellemeleri kontrol eder
+- Yeni sürüm mevcut olduğunda bildirim alırsınız
+- Güncelleme indirildikten sonra otomatik olarak kurulur
 
-## Lisans
+## 👨‍💻 Geliştirici
+- Resul Çelik
 
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## İletişim
-
-Sorularınız veya önerileriniz için Issues bölümünü kullanabilirsiniz. 
+## 📄 Lisans
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın. 
