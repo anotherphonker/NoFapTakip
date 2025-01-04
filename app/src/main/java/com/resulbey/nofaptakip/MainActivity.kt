@@ -15,6 +15,16 @@ import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
+import kotlinx.coroutines.launch
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.resulbey.nofaptakip.updater.UpdateManager
+import android.content.Context
+import android.content.Intent
+import android.content.PendingIntent
+import android.app.AlarmManager
+import android.content.pm.PackageManager
+import android.os.Build
 
 class MainActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
@@ -28,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var allBadgesButton: MaterialButton
     private lateinit var relapseButton: MaterialButton
     private lateinit var emergencyButton: MaterialButton
+    private lateinit var updateManager: UpdateManager
+    private lateinit var checkUpdateButton: MaterialButton
     
     private val badges = mapOf(
         1 to Pair("Yeni Başlangıç", "İlk adımı attın! Her yolculuk tek bir adımla başlar."),
@@ -41,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     )
     
     private val motivationalTips = arrayOf(
+        // Genel Motivasyon
         "Bugün zor olabilir, ama yarın daha güçlü olacaksın!",
         "Her 'Hayır' dediğinde, iradenin gücü artıyor.",
         "Geçmiş seni tanımlamaz, bugünkü seçimlerin geleceğini belirler.",
@@ -49,6 +62,8 @@ class MainActivity : AppCompatActivity() {
         "Başarı bir süreçtir, bir anda olacak bir şey değil.",
         "Her gün yeni bir başlangıç, her an yeni bir fırsat!",
         "Güçlü ol, kararlı ol, başaracaksın!",
+
+        // Bilimsel Gerçekler
         "Pornografi beynindeki ödül sistemini bozar ve doğal motivasyonunu azaltır.",
         "Aşırı dopamin salınımı, beyninin normal aktivitelere karşı duyarsızlaşmasına neden olur.",
         "Mastürbasyon bağımlılığı, sosyal ilişkilerini ve özgüvenini olumsuz etkiler.",
@@ -61,14 +76,38 @@ class MainActivity : AppCompatActivity() {
         "Testosteron seviyen dengeleniyor, enerjin ve motivasyonun artıyor.",
         "Dopamin detoksu yapıyorsun, yakında hayattan daha çok zevk alacaksın.",
         "Prefrontal korteksin güçleniyor, irade gücün her gün artıyor.",
-        "Bağımlılık beynini ele geçirmiş olabilir, ama sen beynindan daha güçlüsün!",
+
+        // Bağımlılık ve İyileşme
+        "Bağımlılık beynini ele geçirmiş olabilir, ama sen beyninden daha güçlüsün!",
         "Her 'Hayır' dediğinde, yeni ve sağlıklı nöral bağlantılar oluşturuyorsun.",
         "Porno, beyninin gerçeklik algısını bozar. Sen gerçek hayatı seç!",
         "Bağımlılık döngüsünü kırmak zor olabilir, ama imkansız değil. Sen yapabilirsin!",
         "Beynin plastisite özelliğine sahip, yani kendini onarabilir. Ona bu şansı ver!",
         "Her gün temiz kaldığında, beynin biraz daha normale dönüyor.",
         "Gerçek mutluluk, dopamin bağımlılığından kurtulmakla başlar.",
-        "Porno, beyninin ödül sistemini hackler. Sen kontrolü geri al!"
+        "Porno, beyninin ödül sistemini hackler. Sen kontrolü geri al!",
+
+        // Yeni Eklenen Mesajlar
+        "Her zorluk, daha güçlü bir karakterin tohumudur.",
+        "Bugün vazgeçmemek, yarın için gurur kaynağın olacak.",
+        "Gerçek özgürlük, dürtülerini kontrol edebilmektir.",
+        "Kendine yatırım yap, geleceğin sana minnettar olacak.",
+        "Zor zamanlar güçlü insanlar yaratır.",
+        "Her başarısızlık, başarıya giden yolda bir derstir.",
+        "Değişim zordur, ama pişmanlık daha zordur.",
+        "Küçük adımlar, büyük değişimlerin başlangıcıdır.",
+        "Beynin senin düşmanın değil, sadece yeniden eğitilmesi gerekiyor.",
+        "Bağımlılık bir hastalıktır, ama iyileşmek senin elinde.",
+        "Her gün yeni bir zafer şansıdır.",
+        "Geçmişini değiştiremezsin, ama geleceğini şekillendirebilirsin.",
+        "Başarı bir seçimdir, her gün bu seçimi yapıyorsun.",
+        "İrade kası gibidir, kullandıkça güçlenir.",
+        "Zorluklarla yüzleşmek, karakterini güçlendirir.",
+        "Her 'Hayır' bir zaferdir, her zafer bir adımdır.",
+        "Bağımlılık zincirlerini kır, özgürlüğünü geri al!",
+        "Sen düşündüğünden çok daha güçlüsün.",
+        "Değişim içeriden başlar, dışarıdan görünür.",
+        "Bugünün fedakarlığı, yarının zaferidir."
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         
         prefs = getSharedPreferences("NoFapPrefs", MODE_PRIVATE)
+        updateManager = UpdateManager(this)
         
         welcomeText = findViewById(R.id.welcomeText)
         streakText = findViewById(R.id.streakText)
@@ -87,12 +127,16 @@ class MainActivity : AppCompatActivity() {
         allBadgesButton = findViewById(R.id.allBadgesButton)
         relapseButton = findViewById(R.id.relapseButton)
         emergencyButton = findViewById(R.id.emergencyButton)
+        checkUpdateButton = findViewById(R.id.checkUpdateButton)
         
         setupWelcomeMessage()
         updateStreak()
         setupButtons()
         updateBadges()
         updateDarkModeButton()
+        requestNotificationPermission()
+        setupDailyNotification()
+        checkForUpdates()
     }
     
     private fun setupWelcomeMessage() {
@@ -160,6 +204,10 @@ class MainActivity : AppCompatActivity() {
         
         emergencyButton.setOnClickListener {
             showMotivationalTip()
+        }
+        
+        checkUpdateButton.setOnClickListener {
+            checkForUpdates(showLoading = true)
         }
     }
     
@@ -247,14 +295,20 @@ class MainActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_relapse, null)
         val reasonInput = dialogView.findViewById<TextInputEditText>(R.id.reasonInput)
         
-        MaterialAlertDialogBuilder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setTitle("Neden Relapse Oldun?")
             .setView(dialogView)
-            .setPositiveButton("Kaydet") { dialog, _ ->
+            .setPositiveButton("Kaydet", null) // Butonu şimdilik null olarak ayarlıyoruz
+            .setNegativeButton("İptal", null)
+            .create()
+
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setOnClickListener {
                 val reason = reasonInput.text.toString()
                 if (reason.isBlank()) {
                     reasonInput.error = "Lütfen bir sebep girin"
-                    return@setPositiveButton
+                    return@setOnClickListener
                 }
                 
                 // Önceki relapse tarihini ve sebebini sakla
@@ -283,8 +337,9 @@ class MainActivity : AppCompatActivity() {
                 showMotivationalTip()
                 dialog.dismiss()
             }
-            .setNegativeButton("İptal", null)
-            .show()
+        }
+        
+        dialog.show()
     }
     
     private fun showMotivationalTip() {
@@ -296,5 +351,113 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Bildirim İzni")
+                    .setMessage("Günlük motivasyon mesajları ve rozet kazanımlarını alabilmek için bildirim iznine ihtiyacımız var.")
+                    .setPositiveButton("İzin Ver") { _, _ ->
+                        requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1)
+                    }
+                    .setCancelable(false)
+                    .show()
+            }
+        }
+    }
+    
+    private fun setupDailyNotification() {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, DailyNotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            add(Calendar.DAY_OF_YEAR, 1)
+        }
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        }
+    }
+
+    private fun checkForUpdates(showLoading: Boolean = false) {
+        var progressDialog: AlertDialog? = null
+        
+        if (showLoading) {
+            progressDialog = MaterialAlertDialogBuilder(this)
+                .setTitle("Güncelleme Kontrolü")
+                .setMessage("Güncellemeler kontrol ediliyor...")
+                .setView(R.layout.dialog_progress)
+                .setCancelable(false)
+                .create()
+            progressDialog.show()
+        }
+        
+        lifecycleScope.launch {
+            try {
+                val updateInfo = updateManager.checkForUpdates()
+                progressDialog?.dismiss()
+                
+                if (updateInfo.hasUpdate) {
+                    MaterialAlertDialogBuilder(this@MainActivity)
+                        .setTitle("Güncelleme Mevcut!")
+                        .setMessage("Yeni sürüm (${updateInfo.latestVersion}) mevcut. Güncellemek ister misiniz?")
+                        .setPositiveButton("Güncelle") { _, _ ->
+                            updateManager.requestInstallPermission()
+                            updateManager.downloadUpdate(updateInfo.downloadUrl)
+                        }
+                        .setNegativeButton("Daha Sonra", null)
+                        .setCancelable(false)
+                        .show()
+                } else if (showLoading) {
+                    MaterialAlertDialogBuilder(this@MainActivity)
+                        .setTitle("Güncelleme Kontrolü")
+                        .setMessage("Uygulamanız güncel! (${BuildConfig.VERSION_NAME})")
+                        .setPositiveButton("Tamam", null)
+                        .show()
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Uygulamanız güncel! (${BuildConfig.VERSION_NAME})",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                progressDialog?.dismiss()
+                MaterialAlertDialogBuilder(this@MainActivity)
+                    .setTitle("Hata")
+                    .setMessage(e.message)
+                    .setPositiveButton("Tamam", null)
+                    .show()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1234 && resultCode == RESULT_OK) {
+            // Kullanıcı bilinmeyen kaynaklardan yükleme iznini verdi
+            updateManager.installUpdate()
+        }
     }
 } 
