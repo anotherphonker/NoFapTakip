@@ -4,7 +4,7 @@
 > ## ⚠️ ÖNEMLİ DUYURU
 > **Bu uygulama artık aktif olarak geliştirilmemektedir ve yeni güncelleme almayacaktır.**
 > - Son sürüm: v1.3.0
-> - Son güncelleme tarihi: Ocak 2024
+> - Son güncelleme tarihi: 24 Ocak 2025
 > - Mevcut özellikler çalışmaya devam edecektir
 > - Yeni özellik veya güncelleme planlanmamaktadır
 > - Kaynak kod GitHub'da arşivlenecektir
