@@ -23,9 +23,9 @@ Bu repo **artık güncellenmiyor**! Tüm geliştirmeler yeni repoda devam ediyor
 
 ---
 
-## 📥 Son Kararlı Sürüm (v1.0)
+## 📥 Son Kararlı Sürüm (v1.3.0)
 Son yayınlanan APK:  
-[![Download](https://img.shields.io/badge/Download-APK-blue)](https://example.com/nofap_v1.apk)
+[![Download](https://img.shields.io/badge/Download-APK-blue)](https://github.com/anotherphonker/NoFapTakip/releases/download/v1.3.0/NoFapTakipv1.3.0.apk))
 
 ---
 
